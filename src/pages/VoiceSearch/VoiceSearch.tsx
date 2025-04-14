@@ -66,8 +66,6 @@ export const VoiceSearch = () => {
   const startVoiceRecognition = () => {
     setIsListening(true);
     Haptics.impact({ style: ImpactStyle.Medium });
-
-    // Use the correct SpeechRecognition constructor
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -95,16 +93,19 @@ export const VoiceSearch = () => {
       Haptics.notification({ type: NotificationType.Warning });
     };
 
-    recognition.onend = () => {
-      setIsListening(false);
-      if (transcript) {
-        // Navigate to search results with the transcript
-        navigate("/search", { state: { searchQuery: transcript } });
-      }
-    };
-
     recognition.start();
   };
+
+  useEffect(() => {
+    let timeOut: any;
+    timeOut = setTimeout(() => {
+      navigate("/text-search", { state: { searchQuery: transcript } });
+    }, 4 * 1000);
+
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [transcript]);
 
   return (
     <Container>

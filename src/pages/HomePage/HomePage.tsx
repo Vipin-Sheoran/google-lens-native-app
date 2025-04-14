@@ -19,7 +19,6 @@ import GeminiIcon from "../../assets/icons/gemini-icon.png";
 import { FeedItem } from "../../components/FeedItem/FeedItem";
 import { Sidebar } from "../../components/Sidebar/Sidebar";
 
-// Mock feed data
 const feedData = [
   {
     id: 1,
