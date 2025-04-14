@@ -5,7 +5,6 @@ import { IconButton } from "../../components/common/IconButton";
 import { SearchIcon, MicIcon } from "../../components/common/Icons";
 import {
   Camera,
-  Grid3x3,
   GraduationCap,
   Image,
   Languages,

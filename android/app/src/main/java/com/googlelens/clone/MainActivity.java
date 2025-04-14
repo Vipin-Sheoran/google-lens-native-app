@@ -1,4 +1,4 @@
-package com.vipin.googlelensclone;
+package com.googlelens.clone;
 
 import com.getcapacitor.BridgeActivity;
 

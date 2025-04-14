@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">google-lens-clone</string>
-    <string name="title_activity_main">google-lens-clone</string>
-    <string name="package_name">com.vipin.googlelensclone</string>
-    <string name="custom_url_scheme">com.vipin.googlelensclone</string>
+    <string name="app_name">Google Lens Clone</string>
+    <string name="title_activity_main">Google Lens Clone</string>
+    <string name="package_name">com.googlelens.clone</string>
+    <string name="custom_url_scheme">com.googlelens.clone</string>
 </resources>

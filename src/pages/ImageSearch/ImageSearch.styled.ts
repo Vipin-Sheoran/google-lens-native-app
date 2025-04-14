@@ -187,6 +187,59 @@ export const AnalyzingOverlay = styled.div`
   animation: ${fadeIn} 0.3s ease-out;
 `;
 
+export const LoadingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.xl};
+  height: 50vh;
+  animation: ${fadeIn} 0.3s ease-out;
+`;
+
+export const LoadingText = styled.div`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.sizes.lg};
+  text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: ${({ theme }) => theme.typography.sizes.md};
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: ${({ theme }) => theme.spacing.md};
+  height: 50vh;
+  text-align: center;
+  animation: ${fadeIn} 0.3s ease-out;
+`;
+
+export const ErrorText = styled.div`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.sizes.md};
+  margin: ${({ theme }) => theme.spacing.md} 0;
+  max-width: 280px;
+`;
+
+export const RetryButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.accent};
+  color: ${({ theme }) => theme.colors.primary};
+  padding: ${({ theme }) => `${theme.spacing.sm} ${theme.spacing.lg}`};
+  border-radius: ${({ theme }) => theme.borderRadius.full};
+  font-weight: 500;
+  margin-top: ${({ theme }) => theme.spacing.md};
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
 export const AnalyzingText = styled.div`
   color: ${({ theme }) => theme.colors.text};
   font-size: ${({ theme }) => theme.typography.sizes.lg};
@@ -263,10 +316,28 @@ export const ModeButton = styled.button`
   gap: 5px;
   color: white;
   font-size: 12px;
-  padding: ${({ theme }) => theme.spacing.xs};
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;
 
 export const FlashButton = styled.button`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #444;
   color: white;
-  padding: ${({ theme }) => theme.spacing.xs};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;

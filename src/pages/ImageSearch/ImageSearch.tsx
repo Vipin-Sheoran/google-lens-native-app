@@ -4,8 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { IconButton } from "../../components/common/IconButton";
 import { CameraIcon, GalleryIcon } from "../../components/common/Icons";
 import * as S from "./ImageSearch.styled";
-import { Haptics, ImpactStyle } from "@capacitor/haptics";
-import { ChevronLeft, Search, Image, Scan, FileX } from "lucide-react";
+import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
+import {
+  ChevronLeft,
+  Search,
+  Image,
+  Scan,
+  FileX,
+  AlertCircle,
+} from "lucide-react";
 import { Container } from "../../components/common/style";
 
 export const ImageSearch = () => {
@@ -13,11 +20,14 @@ export const ImageSearch = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [mode, setMode] = useState<"options" | "camera" | "gallery">("options");
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleBack = async () => {
     if (mode !== "options") {
       setMode("options");
       setCapturedImage(null);
+      setError(null);
     } else {
       await Haptics.impact({ style: ImpactStyle.Light });
       navigate(-1);
@@ -28,6 +38,8 @@ export const ImageSearch = () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Light });
       setMode("camera");
+      setIsLoading(true);
+      setError(null);
 
       const image = await Camera.getPhoto({
         quality: 90,
@@ -39,10 +51,13 @@ export const ImageSearch = () => {
         promptLabelPhoto: "Search",
       });
 
+      setIsLoading(false);
+
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);
         setIsAnalyzing(true);
-        // Simulate analysis delay
+        await Haptics.notification({ type: NotificationType.Success });
+
         setTimeout(() => {
           setIsAnalyzing(false);
           navigate("/image-results", {
@@ -56,7 +71,10 @@ export const ImageSearch = () => {
         setMode("options");
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error taking picture:", error);
+      setError("Could not access camera. Please check your permissions.");
+      await Haptics.notification({ type: NotificationType.Error });
       setMode("options");
     }
   };
@@ -65,6 +83,8 @@ export const ImageSearch = () => {
     try {
       await Haptics.impact({ style: ImpactStyle.Light });
       setMode("gallery");
+      setIsLoading(true);
+      setError(null);
 
       const image = await Camera.getPhoto({
         quality: 90,
@@ -76,9 +96,13 @@ export const ImageSearch = () => {
         promptLabelPhoto: "Search",
       });
 
+      setIsLoading(false);
+
       if (image.dataUrl) {
         setCapturedImage(image.dataUrl);
         setIsAnalyzing(true);
+        await Haptics.notification({ type: NotificationType.Success });
+
         // Simulate analysis delay
         setTimeout(() => {
           setIsAnalyzing(false);
@@ -93,7 +117,10 @@ export const ImageSearch = () => {
         setMode("options");
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("Error selecting image:", error);
+      setError("Could not access gallery. Please check your permissions.");
+      await Haptics.notification({ type: NotificationType.Error });
       setMode("options");
     }
   };
@@ -104,9 +131,9 @@ export const ImageSearch = () => {
       title: "Blue ceramic coffee mug",
       confidence: 0.95,
       images: [
-        "https://picsum.photos/id/225/400/300", // Coffee cup
-        "https://picsum.photos/id/326/400/300", // Cup
-        "https://picsum.photos/id/30/400/300", // Coffee cup
+        "https://picsum.photos/id/225/400/300",
+        "https://picsum.photos/id/326/400/300",
+        "https://picsum.photos/id/30/400/300",
       ],
       shops: [
         { name: "CeramicStore", price: "$24.99" },
@@ -125,9 +152,9 @@ export const ImageSearch = () => {
     {
       type: "similarImages",
       images: [
-        "https://picsum.photos/id/431/400/300", // Table setting
-        "https://picsum.photos/id/766/400/300", // Coffee
-        "https://picsum.photos/id/425/400/300", // Wine glasses
+        "https://picsum.photos/id/431/400/300",
+        "https://picsum.photos/id/766/400/300",
+        "https://picsum.photos/id/425/400/300",
       ],
     },
   ];
@@ -152,6 +179,24 @@ export const ImageSearch = () => {
             </S.GoogleDots>
             <S.AnalyzingText>Analyzing image...</S.AnalyzingText>
           </S.AnalyzingOverlay>
+        ) : isLoading ? (
+          <S.LoadingContainer>
+            <S.GoogleDots>
+              <S.Dot $delay={0} />
+              <S.Dot $delay={0.2} />
+              <S.Dot $delay={0.4} />
+              <S.Dot $delay={0.6} />
+            </S.GoogleDots>
+            <S.LoadingText>Loading camera...</S.LoadingText>
+          </S.LoadingContainer>
+        ) : error ? (
+          <S.ErrorContainer>
+            <AlertCircle size={48} color="#EA4335" />
+            <S.ErrorText>{error}</S.ErrorText>
+            <S.RetryButton onClick={() => setError(null)}>
+              Try Again
+            </S.RetryButton>
+          </S.ErrorContainer>
         ) : mode === "options" ? (
           <>
             <S.LogoContainer>
